@@ -1,0 +1,433 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .quiz-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      .question {
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+
+      .options {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .options li {
+        margin: 10px 0;
+      }
+
+      .options label {
+        cursor: pointer;
+        display: block;
+        padding: 10px;
+        border: 2px solid transparent;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+      }
+
+      .options input[type="radio"] {
+        margin-right: 10px;
+      }
+
+      .options .correct-answer {
+        border-color: green;
+        background-color: #d4edda;
+      }
+
+      .options .incorrect-answer {
+        border-color: red;
+        background-color: #f8d7da;
+      }
+
+      .options .highlighted {
+        border-color: #007bff;
+      }
+
+      .btn {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+      }
+
+      .btn:hover {
+        background-color: #45a049;
+      }
+
+      .result {
+        font-size: 18px;
+        margin-top: 20px;
+      }
+
+      .correct {
+        color: green;
+      }
+
+      .incorrect {
+        color: red;
+      }
+
+      .correct-answer-text {
+        color: blue;
+        font-weight: bold;
+      }
+
+      .navigation {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+
+      .navigation button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .navigation button:hover {
+        background-color: #0056b3;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .hidden-prev {
+        display: none;
+      }
+
+      .disabled input[type="radio"] {
+        pointer-events: none;
+      }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+  </head>
+  <body>
+    <div class="quiz-container">
+      <h1>Quiz</h1>
+      <div id="quiz">
+        <div class="question">
+          <p id="questionText"></p>
+          <ul class="options" id="optionsList"></ul>
+        </div>
+        <button class="btn" onclick="checkAnswer()">Submit</button>
+        <div id="result" class="result"></div>
+        <div class="navigation">
+          <button id="prevBtn" class="hidden-prev" onclick="previousQuestion()">
+            Previous
+          </button>
+          <button id="nextBtn" onclick="nextQuestion()">Next</button>
+        </div>
+      </div>
+      <div id="scoreSection" class="hidden">
+        <h2>Your Score</h2>
+        <p id="score"></p>
+      </div>
+    </div>
+
+    <script>
+      const questions = [
+      {
+                question: "1.What is the result of 5.01÷7.8 to the correct number of significant figures?",
+                options: ["A. 0.642", "B. 0.643", "C. 0.64", "D. 0.6"],
+                correctAnswer: "C"
+            },
+            {
+
+                question: "2. What is the result of 4.005×74×0.007 to the correct number of significant figures? ",
+                options: ["A. 0.212", "B. 0.211", "C. 0.21", "D. 0.2"],
+                correctAnswer: "C"
+            },
+            {
+                question: "3. What is the result of 453÷2.031×4.88 to the correct number of significant figures?",
+                options: ["A. 1070", "B. 1070.1", "C. 1070.0", "D. 1070.2"],
+                correctAnswer: "A"
+            },
+            {
+                question: "4. What is the result of 0.004+0.09879 to the correct number of significant figures?",
+                options: ["A. 0.10279", "B. 0.103", "C. 0.10", "D. 0.1"],
+                correctAnswer: "B"
+            },
+            {
+                question: "5. What is the result of 2.4−1.777 to the correct number of significant figures?",
+                options: ["A. 0.623", "B. 0.62", "C. 0.6", "D. 0.7"],
+                correctAnswer: "C"
+            },
+            {
+                question: "6.  What is the result of 532+7.3−48.523 to the correct number of significant figures?",
+                options: ["A. 490.777", "B. 491", "C. 490.8", "D. 490"],
+                correctAnswer: "B"
+            },
+            {
+                question: "7. Check the correctness of the equation: Δx=vt+ ½t²",
+                options: ["A. Correct", "B. Incorrect", "C. Partially correct", "D. Cannot be determined"],
+                correctAnswer: "A"
+            },
+            {
+                question: "8. The following data were collected as part of a quality control study for the analysis of sodium in serum; results are concentrations of Na⁺ in (mmol/L): 140, 143, 141, 137, 132, 157, 143, 149, 118, 145. Report the mean, the standard deviation, and the variance for this data.. This data is a portion of a larger data set from “Andrew, D. F.; Herzberg, A. M. Data: A Collection of Problems for the Student and Research Worker, Springer-Verlag: New York, 1985, pp. 151–155”.",
+                options: ["A. Mean: 140, SD: 9.5, Variance: 90.25", "B. Mean: 141, SD: 9.6, Variance: 92.16", "C. Mean: 142, SD: 9.7, Variance: 94.09", "D. Mean: 143, SD: 9.8, Variance: 96.04"],
+                correctAnswer: "B"
+            },
+            {
+                question: "9. Thirty farmers were asked how many farmworkers they hire during a typical harvest season. Their responses were: 4, 5, 6, 5, 3, 2, 8, 0, 4, 6, 7, 8, 4, 5, 7, 9, 8, 6, 7, 5, 5, 4, 2, 1, 9, 3, 3, 4, 6, 4. Calculate the standard deviation.",
+                options: ["A. 2.0", "B. 2.1", "C. 2.2", "D. 2.3"],
+                correctAnswer: "D"
+            },
+            {
+                question: "10. The temperatures of two bodies measured by a thermometer are t1= 28°C ± 0.4°C and t2= 57°C ± 0.9°C. Calculate the temperature difference and the error therein.",
+                options: ["A. 29°C ± 1.3°C", "B. 29°C ± 1.0°C", "C. 29°C ± 0.9°C", "D. 29°C ± 0.5°C"],
+                correctAnswer: "A"
+            },
+            {
+                question: "11. The length, breadth, and thickness of a rectangular sheet of metal are 4.234m, 1.0050m and 0.51 m respectively. Report the volume of the sheet to correct significant figures.",
+                options: ["A. 2.19 m³", "B. 2.18 m³", "C. 2.17 m³", "D. 2.16 m³"],
+                correctAnswer: "B"
+            },
+            {
+                question: "12. Calculate the variance and the standard deviation of the following density (g/cm³)data: 141, 154, 124, 130, 145, 160, 132, 138, 140, and 150.",
+                options: ["A. Variance: 60, SD: 7.75", "B. Variance: 62, SD: 7.87", "C. Variance: 64, SD: 8.00", "D. Variance: 66, SD: 8.12"],
+                correctAnswer: "B"
+            },
+            {
+                question: "13. Consider a simple pendulum, having a bob attached to a string, that oscillates under the action of the force of gravity. Suppose that the period of oscillation of the simple pendulum depends on its length (l), mass of the bob (m) and acceleration due to gravity (g). Derive the expression for its time period using method of dimensions.",
+                options: ["A. T=2π√(l/g)", "B. T=2π√(m/g)", "C. T=2π√(l/m)", "D. T=2π√(g/l)"],
+                correctAnswer: "A"
+            },
+            {
+                question: "14. While calculating the mean and variance of 10 readings, a student wrongly used the reading 52 for the correct reading 25. He obtained the mean and variance as 45 and 16 respectively. Find the correct mean and the variance.",
+                options: ["A. Mean: 42, Variance: 13", "B. Mean: 43, Variance: 14", "C. Mean: 44, Variance: 15", "D. Mean: 45, Variance: 16"],
+                correctAnswer: "A"
+            },
+            {
+                question: "15. Find the relative error in Z, if Z=A⁴B⅓/CD⅔",
+                options: ["A. \( \\frac{\\Delta Z}{Z} = t \\frac{\\Delta A}{A} + \\frac{1}{3} \\frac{\\Delta B}{B} + \\frac{\\Delta C}{C} + \\frac{3}{2} \\frac{\\Delta D}{D} \)", "B. \( \\frac{\\Delta Z}{Z} = t \\frac{\\Delta A}{A} - \\frac{1}{3} \\frac{\\Delta B}{B} - \\frac{\\Delta C}{C} - \\frac{3}{2} \\frac{\\Delta D}{D} \)", "C. \( \\frac{\\Delta Z}{Z} = t \\frac{\\Delta A}{A} + \\frac{1}{3} \\frac{\\Delta B}{B} - \\frac{\\Delta C}{C} - \\frac{3}{2} \\frac{\\Delta D}{D} \)", "D. \( \\frac{\\Delta Z}{Z} = t \\frac{\\Delta A}{A} - \\frac{1}{3} \\frac{\\Delta B}{B} + \\frac{\\Delta C}{C} + \\frac{3}{2} \\frac{\\Delta D}{D} \)"],
+                correctAnswer: "B"
+            },
+            {
+                question: "16. The velocity 'V' of a particle depends upon the time 't' according to the equation V= √(ab) + bt³ + c/(d + t²) Determine the units of a, b, c and d. All have SI units.",
+                options: ["A. a: m²/s², b: m/s³, c: m/s, d: s²", "B. a: m²/s², b: m/s³ , c: m/s², d: s²", "C. a:  m²/s², b: m/s³, c: m/s, d: s", "D. a:  m²/s², b: m/s³, c: m/s², d: s"],
+                correctAnswer: "A"
+            },
+            {
+                question: "17. The period 'T' of a simple pendulum is measured in time units and is described by T=2π√(l/g) Where l is the length of the pendulum and 'g' is the free fall acceleration in units of length divided by square of time. T=2π√(l/g) is dimensionally ___________.",
+                options: ["A. Correct", "B. Incorrect", "C. Partially correct", "D. Cannot be determined"],
+                correctAnswer: "A"
+            },
+            {
+                question: "18. The force F acting on a body moving in a circular path depends on mass of the body (m), velocity (v) and radius (r) of the circular path. Obtain the expression for the force by dimensional analysis method. (Take the value of k = 1 ).",
+                options: ["A. F= mv²/r", "B. F = mv/r", "C. F = mv²/r²", "D. F = mvr/r²"],
+                correctAnswer: "A"
+            },
+            {
+                question: "19. How many significant figures in 34.6209?",
+                options: ["A. 6", "B. 5", "C. 4", "D. 3"],
+                correctAnswer: "A"
+            },
+            {
+                question: "20. How many significant figures in 0.003048?",
+                options: ["A. 5", "B. 4", "C. 3", "D. 2"],
+                correctAnswer: "A"
+            },
+            {
+                question: "21. How many significant figures in 5010.0?",
+                options: ["A. 6", "B. 5", "C. 4", "D. 3"],
+                correctAnswer: "A"
+            },
+            {
+                question: "22. How many significant figures in 4032.090?",
+                options: ["A. 7", "B. 6", "C. 5", "D. 4"],
+                correctAnswer: "A"
+            },
+            {
+                question: "23. Solve this using the correct number of significant figures:  0.003 + 3.5198 + 0.0118 ",
+                options: ["A. 3.5346", "B. 3.535", "C. 3.53", "D. 3.5"],
+                correctAnswer: "C"
+            },
+            {
+                question: "24. Solve this using the correct number of significant figures: 6.90/2.8952",
+                options: ["A. 2.383", "B. 2.38", "C. 2.4", "D. 2.3"],
+                correctAnswer: "B"
+            },
+            {
+                question: "25. Solve this using the correct number of significant figures: 98.1×0.03",
+                options: ["A. 2.943", "B. 2.94", "C. 2.9", "D. 3.0"],
+                correctAnswer: "B"
+            },
+            {
+                question: "26. A meter has 1000 millimeters in it. How many significant figures does this number have?",
+                options: ["A. 4", "B. 3", "C. 2", "D. 1"],
+                correctAnswer: "A"
+            },
+            {
+                question: "27. The marks of a class of eight students (that is, a statistical population) are the following eight values: 2, 4, 4, 4, 5, 5, 7, 9. Calculate mean, absolute error, mean absolute error, relative error, percentage error, variance, standard deviation, and standard error.",
+                options: ["A. Mean: 4.75, SD: 1.83", "B. Mean: 4.80, SD: 1.85", "C. Mean: 4.85, SD: 1.87", "D. Mean: 4.90, SD: 1.89"],
+                correctAnswer: "A"
+            },
+            {
+                question: "28. 74 g of a substance occupies 1.2 cm³. Express its density by keeping the significant figures in view.",
+                options: ["A. 61.67 g/cm³", "B. 61.7 g/cm³", "C. 61.6 g/cm³", "D. 62 g/cm³"],
+                correctAnswer: "B"
+            },
+            {
+                question: "29. The radius of a circle is measured to be 10.5 m ± 0.2 m. Calculate the area and circumference of the circle and give the uncertainty in each value.",
+                options: ["A. Area: 346 m² ± 14 m², Circumference: 66.0 m ± 1.3 m", "B. Area: 347 m² ± 14 m², Circumference: 66.1 m ± 1.3 m", "C. Area: 348 m² ± 14 m², Circumference: 66.2 m ± 1.3 m", "D. Area: 349 m² ± 14 m², Circumference: 66.3 m ± 1.3 m"],
+                correctAnswer: "A"
+            }
+      ];
+
+      let currentQuestionIndex = 0;
+      let correctAnswers = 0;
+
+      function loadQuestion(index) {
+        const questionText = document.getElementById("questionText");
+        const optionsList = document.getElementById("optionsList");
+        const resultDiv = document.getElementById("result");
+
+        questionText.innerHTML = questions[index].question;
+        optionsList.innerHTML = "";
+        optionsList.classList.remove("disabled");
+
+        questions[index].options.forEach((option, idx) => {
+          const li = document.createElement("li");
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = "answer";
+          input.value = String.fromCharCode(65 + idx);
+          input.id = `opt${String.fromCharCode(65 + idx)}`;
+
+          const label = document.createElement("label");
+          label.htmlFor = input.id;
+          label.innerHTML = option;
+
+          li.appendChild(input);
+          li.appendChild(label);
+          optionsList.appendChild(li);
+        });
+
+        resultDiv.textContent = "";
+        resultDiv.classList.remove("correct", "incorrect");
+
+        if (currentQuestionIndex === questions.length - 1) {
+          document.getElementById("nextBtn").classList.add("hidden");
+        } else {
+          document.getElementById("nextBtn").classList.remove("hidden");
+        }
+
+        if (currentQuestionIndex === 0) {
+          document.getElementById("prevBtn").classList.add("hidden-prev");
+        } else {
+          document.getElementById("prevBtn").classList.remove("hidden-prev");
+        }
+
+        MathJax.typesetPromise();
+      }
+
+      function checkAnswer() {
+        const selectedOption = document.querySelector(
+          'input[name="answer"]:checked'
+        );
+        const resultDiv = document.getElementById("result");
+        const optionsList = document.getElementById("optionsList");
+        const options = document.querySelectorAll(".options li");
+
+        if (!selectedOption) {
+          resultDiv.textContent = "Please select an answer.";
+          resultDiv.classList.remove("correct", "incorrect");
+          return;
+        }
+
+        const selectedAnswer = selectedOption.value;
+        const correctAnswer = questions[currentQuestionIndex].correctAnswer;
+
+        options.forEach((option) => {
+          option.classList.remove(
+            "correct-answer",
+            "incorrect-answer",
+            "highlighted"
+          );
+        });
+
+        const selectedLabel = selectedOption.parentNode;
+        if (selectedAnswer === correctAnswer) {
+          selectedLabel.classList.add("correct-answer");
+          resultDiv.textContent = "Correct!";
+          resultDiv.classList.add("correct");
+          resultDiv.classList.remove("incorrect");
+          correctAnswers++;
+        } else {
+          selectedLabel.classList.add("incorrect-answer");
+          resultDiv.textContent = `Incorrect! The correct answer is ${correctAnswer}.`;
+          resultDiv.classList.add("incorrect");
+          resultDiv.classList.remove("correct");
+        }
+
+        const correctLabel = document.querySelector(
+          `#opt${correctAnswer}`
+        ).parentNode;
+        correctLabel.classList.add("correct-answer");
+
+        optionsList.classList.add("disabled");
+      }
+
+      function previousQuestion() {
+        if (currentQuestionIndex > 0) {
+          currentQuestionIndex--;
+          loadQuestion(currentQuestionIndex);
+        }
+      }
+
+      function nextQuestion() {
+        if (currentQuestionIndex < questions.length - 1) {
+          currentQuestionIndex++;
+          loadQuestion(currentQuestionIndex);
+        } else {
+          document.getElementById("quiz").classList.add("hidden");
+          document.getElementById("scoreSection").classList.remove("hidden");
+          document.getElementById(
+            "score"
+          ).textContent = `You answered ${correctAnswers} out of ${questions.length} questions correctly.`;
+        }
+      }
+
+      loadQuestion(currentQuestionIndex);
+    </script>
+  </body>
+</html>

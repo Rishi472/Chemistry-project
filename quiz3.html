@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .options li {
+            margin: 10px 0;
+        }
+
+        .options label {
+            cursor: pointer;
+            display: block;
+            padding: 10px;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .options .correct-answer {
+            border-color: green;
+            background-color: #d4edda;
+        }
+
+        .options .incorrect-answer {
+            border-color: red;
+            background-color: #f8d7da;
+        }
+
+        .options .highlighted {
+            border-color: #007bff;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .correct {
+            color: green;
+        }
+
+        .incorrect {
+            color: red;
+        }
+
+        .correct-answer-text {
+            color: blue;
+            font-weight: bold;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .navigation button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .navigation button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Hide the next button when we are at the last question */
+        .hidden {
+            display: none;
+        }
+
+        /* Hide the previous button on the first question */
+        .hidden-prev {
+            display: none;
+        }
+
+        /* Disable radio buttons */
+        .disabled input[type="radio"] {
+            pointer-events: none;
+        }
+    </style>
+    <!-- Include MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <h1>Quiz</h1>
+        <div id="quiz">
+            <!-- Questions will be dynamically inserted here -->
+            <div class="question">
+                <p id="questionText">What is the capital of France?</p>
+                <ul class="options" id="optionsList">
+                    <li><input type="radio" name="answer" value="A" id="optA"><label for="optA">A. Berlin</label></li>
+                    <li><input type="radio" name="answer" value="B" id="optB"><label for="optB">B. Madrid</label></li>
+                    <li><input type="radio" name="answer" value="C" id="optC"><label for="optC">C. Paris</label></li>
+                    <li><input type="radio" name="answer" value="D" id="optD"><label for="optD">D. Rome</label></li>
+                </ul>
+            </div>
+            <button class="btn" onclick="checkAnswer()">Submit</button>
+            <div id="result" class="result"></div>
+            <div class="navigation">
+                <button id="prevBtn" class="hidden-prev" onclick="previousQuestion()">Previous</button>
+                <button id="nextBtn" onclick="nextQuestion()">Next</button>
+            </div>
+        </div>
+        <div id="scoreSection" class="hidden">
+            <h2>Your Score</h2>
+            <p id="score"></p>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "For a reaction, \(2 \\mathrm{~K}(\\mathrm{~g})+\\mathrm{L}(\\mathrm{g}) \\rightarrow 2 \\mathrm{M}(\\mathrm{g}) ; \\Delta \\mathrm{U}=-10.5 \\mathrm{~kJ}\) and \( \\Delta \\mathrm{S}=-44.1 \\mathrm{JK}^{-1}\). Calculate \( \\Delta \\mathrm{G}\) for the reaction at room temperature and predict whether the reaction will be spontaneous or nonspontaneous.",
+                options: ["A. -15.6 kJ", "B. -5.4 kJ", "C. 5.4 kJ", "D. 15.6 kJ"],
+                correctAnswer: "C"
+            },
+            {
+                question: "Will the reaction be spontaneous or nonspontaneous at room temperature?",
+                options: ["A. Spontaneous", "B. Nonspontaneous", "C. Cannot be determined", "D. Both spontaneous and nonspontaneous"],
+                correctAnswer: "B"
+            },
+            {
+                question: "For an isochoric reversible process, calculate the (i) work done (ii) heat supplied (q) and (iii) change in internal energy ( \( \\Delta \\mathrm{U}\) ) if \( \\mathrm{Cv}=3 \\mathrm{R} / 2\) for the gas present in the system and 5 moles of gas is heated from 27°C to 127°C.",
+                options: ["A. 0 J", "B. 5000 J", "C. 10000 J", "D. 15000 J"],
+                correctAnswer: "A"
+            },
+            {
+                question: "What is the heat supplied (q) to the system?",
+                options: ["A. 15000 J", "B. 20000 J", "C. 25000 J", "D. 30000 J"],
+                correctAnswer: "C"
+            },
+            {
+                question: "What is the change in internal energy (\( \\Delta \\mathrm{U}\))?",
+                options: ["A. 15000 J", "B. 20000 J", "C. 25000 J", "D. 30000 J"],
+                correctAnswer: "C"
+            },
+            {
+                question: "Which of the following best states the second law of thermodynamics?",
+                options: ["A. The total energy of an isolated system is constant.", "B. The entropy of an isolated system always increases.", "C. Heat flows from a colder to a hotter body.", "D. Work can be completely converted into heat."],
+                correctAnswer: "B"
+            },
+            {
+                question: "How is entropy related to the spontaneity of a chemical reaction?",
+                options: ["A. Entropy decreases in spontaneous reactions.", "B. Entropy increases in spontaneous reactions.", "C. Entropy remains constant in spontaneous reactions.", "D. Entropy has no relation to spontaneity."],
+                correctAnswer: "B"
+            },
+            {
+                question: "Predict the sign of \( \\Delta S^{\\circ} \\mathrm{rxn}\) and calculate its value for the combustion of 1 mol of propane at \(25^{\\circ} \\mathrm{C}\). \( \\mathrm{C}_3 \\mathrm{H}_8(\\mathrm{~g})+5 \\mathrm{O}_2(\\mathrm{~g}) \\rightarrow 3 \\mathrm{CO}_2(\\mathrm{~g})+4 \\mathrm{H}_2 \\mathrm{O}(\\mathrm{l})\)",
+                options: ["A. Positive", "B. Negative", "C. Zero", "D. Cannot be determined"],
+                correctAnswer: "B"
+            },
+            {
+                question: "What is the value of \( \\Delta S^{\\circ} \\mathrm{rxn}\) for the combustion of 1 mol of propane?",
+                options: ["A. -500 J/K", "B. -400 J/K", "C. -300 J/K", "D. -200 J/K"],
+                correctAnswer: "D"
+            },
+            {
+                question: "Suppose there is a heat transfer of 40.00 J to a system, while the system does 10.00 J of work. Later, there is a heat transfer of 25.00 J out of the system while 4.00 J of work is done on the system. What is the net change in the internal energy of the system?",
+                options: ["A. 5 J", "B. 10 J", "C. 15 J", "D. 20 J"],
+                correctAnswer: "C"
+            },
+            {
+                question: "Potassium chlorate, a common oxidizing agent in fireworks and matchheads, undergoes a solid-state disproportionation reaction when heated. Find out the change in Gibbs free energy of the reaction. \(4 \\mathrm{KClO}_3 (s) \\rightarrow 3 \\mathrm{KClO}_4 (s) + \\mathrm{KCl} (s)\)",
+                options: ["A. -50 kJ/mol", "B. -100 kJ/mol", "C. -150 kJ/mol", "D. -200 kJ/mol"],
+                correctAnswer: "C"
+            },
+            {
+                question: "From the 1st Law of thermodynamics derive the relation between the heat capacity at constant pressure and volume.",
+                options: ["A. \(C_p = C_v + R\)", "B. \(C_p = C_v - R\)", "C. \(C_p = C_v\)", "D. \(C_p = C_v / R\)"],
+                correctAnswer: "A"
+            },
+            {
+                question: "Show that the heat absorbed by an ideal gas at constant volume is equal to the increase in the internal energy of the system, whereas constant pressure is equal to the increase in the enthalpy of the system.",
+                options: ["A. Increase in internal energy", "B. Increase in enthalpy", "C. Decrease in internal energy", "D. Decrease in enthalpy"],
+                correctAnswer: "A"
+            },
+            {
+                question: "What is the heat absorbed by an ideal gas at constant pressure equal to?",
+                options: ["A. Increase in internal energy", "B. Increase in enthalpy", "C. Decrease in internal energy", "D. Decrease in enthalpy"],
+                correctAnswer: "B"
+            },
+            {
+                question: "Construct the wave function for a particle which is in motion within a box of length \(L / 4\) and probability density plots of the first three electronic states of a particle in a one-dimensional box. Also, write the energy expression of the first, second and third excited states.",
+                options: ["A. \( \\frac{h^2}{8mL^2}\)", "B. \( \\frac{4h^2}{8mL^2}\)", "C. \( \\frac{9h^2}{8mL^2}\)", "D. \( \\frac{16h^2}{8mL^2}\)"],
+                correctAnswer: "A"
+            },
+            {
+                question: "What is the energy expression for the second excited state of a particle in a one-dimensional box?",
+                options: ["A. \( \\frac{h^2}{8mL^2}\)", "B. \( \\frac{4h^2}{8mL^2}\)", "C. \( \\frac{9h^2}{8mL^2}\)", "D. \( \\frac{16h^2}{8mL^2}\)"],
+                correctAnswer: "B"
+            },
+            {
+                question: "What is the energy expression for the third excited state of a particle in a one-dimensional box?",
+                options: ["A. \( \\frac{h^2}{8mL^2}\)", "B. \( \\frac{4h^2}{8mL^2}\)", "C. \( \\frac{9h^2}{8mL^2}\)", "D. \( \\frac{16h^2}{8mL^2}\)"],
+                correctAnswer: "C"
+            },
+            {
+                question: "Consider a given reaction, \(S(g)+O_2(g) \\rightarrow SO_2(g)\). Given at \(25^{\\circ} \\mathrm{C}\), change in standard enthalpy and entropy as follows, i) \( \\Delta \\mathrm{HS}\) and \( \\Delta \\mathrm{SS}\) are \((-376.2 \\mathrm{~kJ} / \\mathrm{mol}\) and \(-233 \\mathrm{~J} / \\mathrm{mol})\) ii) \( \\Delta \\mathrm{HO}_2\) and \( \\Delta \\mathrm{SO}_2\) are \((-212.4 \\mathrm{~kJ} / \\mathrm{mol}\) and \(-142 \\mathrm{~J} / \\mathrm{mol})\) (iii) \( \\Delta \\mathrm{HSO}_2\) and \( \\Delta \\mathrm{SSO}_2\) are \((-976.2 \\mathrm{~kJ} / \\mathrm{mol}\) and \(-153 \\mathrm{~J} / \\mathrm{mol})\). Calculate the rate constant of the reaction.",
+                options: ["A. \(10^{-5}\)", "B. \(10^{-10}\)", "C. \(10^{-15}\)", "D. \(10^{-20}\)"],
+                correctAnswer: "B"
+            },
+            {
+                question: "Which conformation of n-butane is the most stable?",
+                options: ["A. Gauche", "B. Anti", "C. Eclipsed", "D. Staggered"],
+                correctAnswer: "B"
+            },
+            {
+                question: "What is the relation between Gibbs Free energy (\( \\Delta G\)), enthalpy (\( \\Delta H\)), and entropy (\( \\Delta S\))?",
+                options: ["A. \( \\Delta G = \\Delta H - T\\Delta S\)", "B. \( \\Delta G = \\Delta H + T\\Delta S\)", "C. \( \\Delta G = \\Delta H / T\\Delta S\)", "D. \( \\Delta G = \\Delta H \\times T\\Delta S\)"],
+                correctAnswer: "A"
+            },
+            {
+                question: "Which of the following conditions favors the spontaneity of a chemical reaction?",
+                options: ["A. \( \\Delta H > 0\) and \( \\Delta S > 0\)", "B. \( \\Delta H < 0\) and \( \\Delta S < 0\)", "C. \( \\Delta H > 0\) and \( \\Delta S < 0\)", "D. \( \\Delta H < 0\) and \( \\Delta S > 0\)"],
+                correctAnswer: "D"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+
+        function loadQuestion(index) {
+            const questionText = document.getElementById('questionText');
+            const optionsList = document.getElementById('optionsList');
+            const resultDiv = document.getElementById('result');
+
+            questionText.innerHTML = questions[index].question;
+            optionsList.innerHTML = '';
+
+            questions[index].options.forEach((option, idx) => {
+                const li = document.createElement('li');
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = 'answer';
+                input.value = String.fromCharCode(65 + idx); // A, B, C, D
+                input.id = `opt${String.fromCharCode(65 + idx)}`;
+                const label = document.createElement('label');
+                label.htmlFor = input.id;
+                label.textContent = option;
+                li.appendChild(input);
+                li.appendChild(label);
+                optionsList.appendChild(li);
+            });
+
+            resultDiv.textContent = '';
+            resultDiv.classList.remove('correct', 'incorrect');
+
+            // Hide next button on the last question
+            if (currentQuestionIndex === questions.length - 1) {
+                document.getElementById('nextBtn').classList.add('hidden');
+            } else {
+                document.getElementById('nextBtn').classList.remove('hidden');
+            }
+
+            // Hide the "Previous" button on the first question
+            if (currentQuestionIndex === 0) {
+                document.getElementById('prevBtn').classList.add('hidden-prev');
+            } else {
+                document.getElementById('prevBtn').classList.remove('hidden-prev');
+            }
+
+            // Re-render MathJax
+            MathJax.typesetPromise();
+        }
+
+        function checkAnswer() {
+            const selectedOption = document.querySelector('input[name="answer"]:checked');
+            const resultDiv = document.getElementById('result');
+            const options = document.querySelectorAll('.options li');
+
+            if (!selectedOption) {
+                resultDiv.textContent = 'Please select an answer.';
+                resultDiv.classList.remove('correct', 'incorrect');
+                return;
+            }
+
+            const selectedAnswer = selectedOption.value;
+            const correctAnswer = questions[currentQuestionIndex].correctAnswer;
+
+            options.forEach(option => {
+                option.classList.remove('correct-answer', 'incorrect-answer', 'highlighted');
+            });
+
+            const selectedLabel = selectedOption.parentNode;
+            if (selectedAnswer === correctAnswer) {
+                selectedLabel.classList.add('correct-answer');
+                resultDiv.textContent = 'Correct!';
+                resultDiv.classList.add('correct');
+                resultDiv.classList.remove('incorrect');
+                correctAnswers++; // Increment score on correct answer
+            } else {
+                selectedLabel.classList.add('incorrect-answer');
+                resultDiv.textContent = `Incorrect! The correct answer is ${correctAnswer}.`;
+                resultDiv.classList.add('incorrect');
+                resultDiv.classList.remove('correct');
+            }
+
+            const correctLabel = document.querySelector(`#opt${correctAnswer}`).parentNode;
+            correctLabel.classList.add('correct-answer');
+
+            // Disable radio buttons after submission
+            optionsList.classList.add('disabled');
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion(currentQuestionIndex);
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion(currentQuestionIndex);
+            } else {
+                // Show the score when the user reaches the last question
+                document.getElementById('quiz').classList.add('hidden');
+                document.getElementById('scoreSection').classList.remove('hidden');
+                document.getElementById('score').textContent = `You answered ${correctAnswers} out of ${questions.length} questions correctly.`;
+            }
+        }
+
+        // Load the first question
+        loadQuestion(currentQuestionIndex);
+    </script>
+
+</body>
+</html>

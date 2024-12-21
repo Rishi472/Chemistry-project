@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            background-image: url("file:///C:/Users/91870/Downloads/123.jpg"); /* Adding your background image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .flashcard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-rows: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .flashcard {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .flashcard:hover {
+            transform: scale(1.05);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            backface-visibility: hidden;
+            transition: transform 0.6s;
+        }
+
+        .flashcard-front {
+            background-color: #fff;
+        }
+
+        .flashcard-back {
+            background-color: #f9f9f9;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.flipped .flashcard-front {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.flipped .flashcard-back {
+            transform: rotateY(360deg);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="flashcard-container">
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are the four common measurements in everyday life?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>1. Measurement of length<br>2. Measurement of temperature<br>3. Measurement of mass<br>4. Measurement of volume</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is a physical quantity?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>A physical property that can be measured and described by a number.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are the two types of physical quantities?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>1. Fundamental quantities (e.g., Mass, Length, Time, Temperature)<br>2. Derived quantities (e.g., Area, Speed, Volume, Force)</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is a unit of measurement?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>The standard used for the measurement of a physical quantity.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>List the seven fundamental SI units and their symbols.</p>
+            </div>
+            <div class="flashcard-back">
+                <p>1. Length - metre (m)<br>
+                    2. Mass - kilogram (kg)<br>
+                    3. Time - second (s)<br>
+                    4. Temperature - kelvin (K)<br>
+                    5. Electric current - ampere (A)<br>
+                    6. Luminous intensity - candela (cd)<br>
+                    7. Amount of substance - mole (mol)</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are the two supplementary units mentioned?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>1. Radian (plane angle)<br>2. Steradian (solid angle)</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are SI prefixes</p>
+            </div>
+            <div class="flashcard-back">
+                <img src="Screenshot 2024-12-21 141113.png" style="width: 120%;">
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are the dimensions of a physical quantity?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>The powers of fundamental quantities in a derived quantity.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is the difference between accuracy and precision?</p>
+            </div>
+            <div class="flashcard-back">
+                <p><b>•Accuracy:</b> Closeness of a measurement to the true value.<br>
+                   <b>•Precision:</b> Limit to which a physical quantity is measured.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are significant figures?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>The total number of digits (reliable digits + last uncertain digit) obtained from a measurement</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are the rules for counting significant figures?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>1. All non-zero digits are significant.<br>
+                   2. Zeros between non-zero digits are significant.<br>
+                   3. Leading zeros are not significant.<br>
+                   4. Trailing zeros are significant if they are to the right of a decimal point.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are exact numbers?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>Numbers that are either defined or the result of a count, having an infinite number of significant figures.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are the rules for rounding off a measurement?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>1. If the digit to be dropped is less than 5, then the preceding digit is left unchanged <br>
+                   2. If the digit to be dropped is more than 5, then the preceding digit is raised by one<br>
+                   3. If the digit to be dropped is 5 followed by digits other than zero, then the preceding digit is raised by one.<br>
+                   4. If the digit to be dropped is 5 followed by zero or nothing, the last remaining digit is increased by 1 if it is odd, but left as it is if even.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is an error in measurement?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>The difference between the actual value of a quantity and the value obtained by a measurement.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is absolute error?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>The magnitude of the difference between the mean value and each individual value.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>How are errors combined in different mathematical operations?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>• Addition/Subtraction: ΔX = ΔA + ΔB<br>
+                   • Multiplication/Division: ΔX/X = (ΔA/A) + (ΔB/B)<br>
+                   • Power: ΔX/X = n(ΔA/A)</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is the standard error of the mean (SEM)?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>The standard error of the mean (SEM) is expressed as σ= σ/√n, where σ is the standard deviation of the population and n is the size of the sample.</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleFlip(element) {
+            element.classList.toggle('flipped');
+        }
+    </script>
+</body>
+
+</html>

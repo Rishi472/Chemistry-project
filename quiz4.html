@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .options li {
+            margin: 10px 0;
+        }
+
+        .options label {
+            cursor: pointer;
+            display: block;
+            padding: 10px;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .options .correct-answer {
+            border-color: green;
+            background-color: #d4edda;
+        }
+
+        .options .incorrect-answer {
+            border-color: red;
+            background-color: #f8d7da;
+        }
+
+        .options .highlighted {
+            border-color: #007bff;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .correct {
+            color: green;
+        }
+
+        .incorrect {
+            color: red;
+        }
+
+        .correct-answer-text {
+            color: blue;
+            font-weight: bold;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .navigation button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .navigation button:hover {
+            background-color: #0056b3;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .hidden-prev {
+            display: none;
+        }
+
+        .disabled input[type="radio"] {
+            pointer-events: none;
+        }
+    </style>
+    <!-- Include MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <h1>Quiz</h1>
+        <div id="quiz">
+            <!-- Questions will be dynamically inserted here -->
+            <div class="question">
+                <p id="questionText">What is the capital of France?</p>
+                <ul class="options" id="optionsList">
+                    <li><input type="radio" name="answer" value="A" id="optA"><label for="optA">A. Berlin</label></li>
+                    <li><input type="radio" name="answer" value="B" id="optB"><label for="optB">B. Madrid</label></li>
+                    <li><input type="radio" name="answer" value="C" id="optC"><label for="optC">C. Paris</label></li>
+                    <li><input type="radio" name="answer" value="D" id="optD"><label for="optD">D. Rome</label></li>
+                </ul>
+            </div>
+            <button class="btn" onclick="checkAnswer()">Submit</button>
+            <div id="result" class="result"></div>
+            <div class="navigation">
+                <button id="prevBtn" class="hidden-prev" onclick="previousQuestion()">Previous</button>
+                <button id="nextBtn" onclick="nextQuestion()">Next</button>
+            </div>
+        </div>
+        <div id="scoreSection" class="hidden">
+            <h2>Your Score</h2>
+            <p id="score"></p>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "1. What is potential energy surface using suitable?.",
+                options: ["A. A graphical representation of the potential energy of a system as a function of its atomic positions.", "B. A surface that shows the kinetic energy of molecules.", "C. A diagram that illustrates the electronic configuration of atoms.", "D. A plot that depicts the temperature changes in a chemical reaction."],
+                correctAnswer: "A"
+            },
+            {
+                question: "2. Why is the boiling point of water greater than that of methanol despite its lower molecular mass?",
+                options: ["A. Water has stronger hydrogen bonds than methanol.", "B. Water has a higher vapor pressure than methanol.", "C. Methanol has a higher density than water.", "D. Water molecules are more polar than methanol molecules."],
+                correctAnswer: "A"
+            },
+            {
+                question: "3. Arrange the following compounds in the order of decreasing boiling points: CH4, SiH4, SiCl4, GeH4, and GeCl4.",
+                options: ["A. GeCl4 > SiCl4 > GeH4 > SiH4 > CH4", "B. CH4 > SiH4 > GeH4 > SiCl4 > GeCl4", "C. GeCl4 > SiCl4 > SiH4 > GeH4 > CH4", "D. SiCl4 > GeCl4 > GeH4 > SiH4 > CH4"],
+                correctAnswer: "C"
+            },
+            {
+                question: "4. Identify the most important intermolecular interaction in  H2O",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Hydrogen bonding", "D. Ion-dipole interactions"],
+                correctAnswer: "C"
+            },
+            {
+                question: "5. Identify the most important intermolecular interaction in HF",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Hydrogen bonding", "D. Ion-dipole interactions"],
+                correctAnswer: "C"
+            },
+            {
+                question: "6. Identify the most important intermolecular interaction in NH3",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Hydrogen bonding", "D. Ion-dipole interactions"],
+                correctAnswer: "C"
+            },
+            {
+                question: "7. Identify the most important intermolecular interaction in CCl4",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Hydrogen bonding", "D. Ion-dipole interactions"],
+                correctAnswer: "A"
+            },
+            {
+                question: "8. Identify the most important intermolecular interaction in CH2Cl2",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Hydrogen bonding", "D. Ion-dipole interactions"],
+                correctAnswer: "B"
+            },
+            {
+                question: "9. Compare the trend in the boiling point for the following hydrogen halides: HI, HCl, HBr, HF.",
+                options: ["A. HF > HI > HBr > HCl", "B. HI > HBr > HCl > HF", "C. HF > HCl > HBr > HI", "D. HCl > HBr > HI > HF"],
+                correctAnswer: "B"
+            },
+            {
+                question: "10. Which molecule makes the stronger hydrogen bond: HF or H2O?",
+                options: ["A. HF", "B. H2O", "C. Both are equally strong", "D. Neither makes hydrogen bonds"],
+                correctAnswer: "B"
+            },
+            {
+                question: "11. Determine the types of forces present in H2O",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Hydrogen bonding", "D. Ion-dipole interactions"],
+                correctAnswer: "C"
+            },
+            {
+                question: "12. Determine the types of forces present in CCl4",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Hydrogen bonding", "D. Ion-dipole interactions"],
+                correctAnswer: "A"
+            },
+            {
+                question: "13. Determine the types of forces present in SO2",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Hydrogen bonding", "D. Ion-dipole interactions"],
+                correctAnswer: "B"
+            },
+            {
+                question: "14. Determine the types of forces present in LiF",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Ionic bonding", "D. Metallic bonding"],
+                correctAnswer: "C"
+            },
+            {
+                question: "15. Determine the types of forces present in Ca(NO3)2 aqueous solution",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Ion-dipole interactions", "D. Hydrogen bonding"],
+                correctAnswer: "C"
+            },
+            {
+                question: "16. Determine the types of forces present in HF",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Hydrogen bonding", "D. Ion-dipole interactions"],
+                correctAnswer: "C"
+            },
+            {
+                question: "17. Arrange the following intermolecular forces in the order of relative strength:",
+                options: ["A. Ion-dipole > H-bond > London dispersion > ion-induced dipole > dipole-induced dipole", "B. H-bond > ion-dipole > dipole-induced dipole > ion-induced dipole > London dispersion", "C. London dispersion > dipole-induced dipole > ion-induced dipole > ion-dipole > H-bond", "D. Dipole-induced dipole > ion-induced dipole > London dispersion > ion-dipole > H-bond"],
+                correctAnswer: "B"
+            },
+            {
+                question: "18. Calculate the total number of bond distances, bond angles, and dihedral angles in an ethene molecule.",
+                options: ["A. Bond distances: 3, Bond angles: 4, Dihedral angles: 2", "B. Bond distances: 4, Bond angles: 6, Dihedral angles: 3", "C. Bond distances: 5, Bond angles: 6, Dihedral angles: 4", "D. Bond distances: 6, Bond angles: 6, Dihedral angles: 3"],
+                correctAnswer: "B"
+            },
+            {
+                question: "19. Give proper reason: H2O is liquid but H2S is gas although H2S is having higher molecular weight than H2O.",
+                options: ["A. H2O has stronger hydrogen bonds than H2S.", "B. H2S has a higher boiling point than H2O.", "C. H2O has a higher vapor pressure than H2S.", "D. H2S has stronger London dispersion forces than H2O."],
+                correctAnswer: "A"
+            },
+            {
+                question: "20. Give proper reason: The boiling point of C2H5OH is more compared to CH3OCH3. Molecular weight for both the molecules are identical.",
+                options: ["A. C2H5OH has stronger hydrogen bonds than CH3OCH3.", "B. CH3OCH3 has a higher density than C2H5OH.", "C. C2H5OH has a higher vapor pressure than CH3OCH3.", "D. CH3OCH3 has stronger London dispersion forces than C2H5OH."],
+                correctAnswer: "A"
+            },
+            {
+                question: "21. Give proper reason: Why three phases are existing for the water molecule?",
+                options: ["A. Water can form hydrogen bonds in all three phases.", "B. Water has a high boiling point and freezing point.", "C. Water has a unique molecular structure that allows it to exist in three phases.", "D. Water has a high specific heat capacity."],
+                correctAnswer: "C"
+            },
+            {
+                question: "22. What types of molecular forces are existing in HF",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Hydrogen bonding", "D. Ion-dipole interactions"],
+                correctAnswer: "C"
+            },
+            {
+                question: "23. What types of molecular forces are existing in H2S",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Hydrogen bonding", "D. Ion-dipole interactions"],
+                correctAnswer: "B"
+            },
+            {
+                question: "24. What types of molecular forces are existing in PCl3",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Hydrogen bonding", "D. Ion-dipole interactions"],
+                correctAnswer: "B"
+            },
+            {
+                question: "25. What types of molecular forces are existing in NaCl",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Ionic bonding", "D. Metallic bonding"],
+                correctAnswer: "C"
+            },
+            {
+                question: "26. What types of molecular forces are existing in NaCl aqueous solution",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Ion-dipole interactions", "D. Hydrogen bonding"],
+                correctAnswer: "C"
+            },
+            {
+                question: "27. What types of molecular forces are existing in Na-Hg",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Ionic bonding", "D. Metallic bonding"],
+                correctAnswer: "D"
+            },
+            {
+                question: "28. What types of interactions are existing amongst the molecule pair HCl in water",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Ion-dipole interactions", "D. Hydrogen bonding"],
+                correctAnswer: "C"
+            },
+            {
+                question: "29. What types of interactions are existing amongst the molecule pairs PCl3 and SO2",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Ion-dipole interactions", "D. Hydrogen bonding"],
+                correctAnswer: "B"
+            },
+            {
+                question: "30. What types of interactions are existing amongst the molecule pair 2 moles of acetic acid",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Hydrogen bonding", "D. Ion-dipole interactions"],
+                correctAnswer: "C"
+            },
+            {
+                question: "31. What types of interactions are existing amongst the molecule pairs Cl2 in SO2",
+                options: ["A. London dispersion forces", "B. Dipole-dipole interactions", "C. Ion-dipole interactions", "D. Hydrogen bonding"],
+                correctAnswer: "A"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+
+        function loadQuestion(index) {
+            const questionText = document.getElementById('questionText');
+            const optionsList = document.getElementById('optionsList');
+            const resultDiv = document.getElementById('result');
+
+            questionText.innerHTML = questions[index].question;
+            optionsList.innerHTML = '';
+
+            questions[index].options.forEach((option, idx) => {
+                const li = document.createElement('li');
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = 'answer';
+                input.value = String.fromCharCode(65 + idx); // A, B, C, D
+                input.id = `opt${String.fromCharCode(65 + idx)}`;
+                const label = document.createElement('label');
+                label.htmlFor = input.id;
+                label.textContent = option;
+                li.appendChild(input);
+                li.appendChild(label);
+                optionsList.appendChild(li);
+            });
+
+            resultDiv.textContent = '';
+            resultDiv.classList.remove('correct', 'incorrect');
+
+            // Hide next button on the last question
+            if (currentQuestionIndex === questions.length - 1) {
+                document.getElementById('nextBtn').classList.add('hidden');
+            } else {
+                document.getElementById('nextBtn').classList.remove('hidden');
+            }
+
+            // Hide the "Previous" button on the first question
+            if (currentQuestionIndex === 0) {
+                document.getElementById('prevBtn').classList.add('hidden-prev');
+            } else {
+                document.getElementById('prevBtn').classList.remove('hidden-prev');
+            }
+
+            // Re-render MathJax
+            MathJax.typesetPromise();
+        }
+
+        function checkAnswer() {
+            const selectedOption = document.querySelector('input[name="answer"]:checked');
+            const resultDiv = document.getElementById('result');
+            const options = document.querySelectorAll('.options li');
+
+            if (!selectedOption) {
+                resultDiv.textContent = 'Please select an answer.';
+                resultDiv.classList.remove('correct', 'incorrect');
+                return;
+            }
+
+            const selectedAnswer = selectedOption.value;
+            const correctAnswer = questions[currentQuestionIndex].correctAnswer;
+
+            options.forEach(option => {
+                option.classList.remove('correct-answer', 'incorrect-answer', 'highlighted');
+            });
+
+            const selectedLabel = selectedOption.parentNode;
+            if (selectedAnswer === correctAnswer) {
+                selectedLabel.classList.add('correct-answer');
+                resultDiv.textContent = 'Correct!';
+                resultDiv.classList.add('correct');
+                resultDiv.classList.remove('incorrect');
+                correctAnswers++; // Increment score on correct answer
+            } else {
+                selectedLabel.classList.add('incorrect-answer');
+                resultDiv.textContent = `Incorrect! The correct answer is ${correctAnswer}.`;
+                resultDiv.classList.add('incorrect');
+                resultDiv.classList.remove('correct');
+            }
+
+            const correctLabel = document.querySelector(`#opt${correctAnswer}`).parentNode;
+            correctLabel.classList.add('correct-answer');
+
+            // Disable radio buttons after submission
+            optionsList.classList.add('disabled');
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion(currentQuestionIndex);
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion(currentQuestionIndex);
+            } else {
+                // Show the score when the user reaches the last question
+                document.getElementById('quiz').classList.add('hidden');
+                document.getElementById('scoreSection').classList.remove('hidden');
+                document.getElementById('score').textContent = `You answered ${correctAnswers} out of ${questions.length} questions correctly.`;
+            }
+        }
+
+        // Load the first question
+        loadQuestion(currentQuestionIndex);
+    </script>
+
+</body>
+</html>

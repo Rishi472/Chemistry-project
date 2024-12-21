@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        .flashcard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-rows: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .flashcard {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .flashcard:hover {
+            transform: scale(1.05);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            backface-visibility: hidden;
+            transition: transform 0.6s;
+        }
+
+        .flashcard-front {
+            background-color: #fff;
+        }
+
+        .flashcard-back {
+            background-color: #f9f9f9;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.flipped .flashcard-front {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.flipped .flashcard-back {
+            transform: rotateY(360deg);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="flashcard-container">
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are intermolecular forces?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>Intermolecular forces are attractive forces between molecules.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are intramolecular forces?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>Intramolecular forces hold atoms together in a molecule</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is a chemical bond?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>A chemical bond is an interaction between atoms, ions, or molecules that enables the formation of chemical compounds. It is a mutual attraction between the nuclei and valence electrons of different atoms that bonds atoms together.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are the three basic types of chemical bonds?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>1. Ionic: Electrostatic attraction between ions.<br>
+                   2. Covalent: Sharing of electrons.<br>
+                   3. Metallic: Metal atoms bonded to several other atoms.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is an ionic bond?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>An ionic bond occurs when electrons are transferred from one atom to another, resulting in the formation of ions. It occurs between one metal and one non-metal. Metals lose electrons to become cations, and non-metals gain electrons to become anions. Examples: NaCl, MgSO4.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is a covalent bond?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>In covalent bonds, atoms share electrons. It occurs between two non-metals and can be formed between two same atoms or two different atoms. Each combining atom must contribute at least one electron to the shared pair. Examples: H2O, CH4.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are polar covalent bonds?</p>
+            </div>
+            <div class="flashcard-back">
+               <p>Polar covalent bonds occur when atoms share electrons unequally. The greater the difference in electronegativity, the more polar the bond. The dipole moment, μ, is calculated as μ = Qr, where Q is the charge and r is the distance.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is a metallic bond?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>Metal atoms share many electrons in a 'sea' that is free to move throughout the metal. The metallic bond results from attractions between the metal cations and the surrounding sea of electrons. Examples: metals and alloys.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are the types of intermolecular forces?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>1. Ion-dipole: ion is attracted to polar molecule.
+                   2. Dipole-dipole: polar molecules attracted to each other.<br>
+                   3. Dipole-induced dipole: polar molecules attracted to non-polar molecules.<br>
+                   4. Induced-dipole - induced-dipole/ van der Waals forces/ London forces: non-polar molecules attraction towards each other due to electron cloud distortion.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are London-Dispersion Forces?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>London-Dispersion Forces, or dispersion forces, are attractions between an instantaneous dipole and an induced dipole. They are present in all molecules, whether they are polar or nonpolar, but they are the only ones that exist in non-polar molecules.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is a potential energy surface (PES)?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>A potential energy surface (PES) represents the relationship between the energy of a molecule and its geometry. The y-axis is the energy of the molecule, which relates to how stable two molecules or two conformations of the same molecule are in relation to one another.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are conformations?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>Conformations are different arrangements of atoms that are interconverted by rotation about single bonds. A particular conformation is called a conformer.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are the two main conformations of ethane?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>1. Eclipsed conformation: The C-H bonds on one carbon are directly aligned with the C-H bonds on the adjacent carbon.<br>
+                   2. Staggered conformation: The C-H bonds on one carbon bisect the H-C-H bond angle on the adjacent carbon.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is the formula for the Lennard-Jones potential?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>The Lennard-Jones potential is given by:<br><img src="Screenshot 2024-12-21 215341.png" style="width:100%;"></p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is the formula for electrostatic interactions?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>Electrostatic interactions are given by Coulomb's Law:<br><img src="Screenshot 2024-12-21 215803.png" style="width:100%;"></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleFlip(element) {
+            element.classList.toggle('flipped');
+        }
+    </script>
+</body>
+
+</html>

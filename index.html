@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computational Chemistry</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background image from local path */
+        .background {
+            position: fixed; /* Keep it fixed in place */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("WhatsApp Image 2024-12-21 at 21.04.15_77a89c04.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1; /* Ensure it stays behind all content */
+        }
+
+        /* Adding an overlay for better text readability */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+            z-index: 1;
+        }
+
+        h1 {
+            z-index: 2;
+            text-align: center;
+            font-size: 4em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px #000000;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .module-links {
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px; /* Increased gap between buttons */
+        }
+
+        .module-links b {
+            margin: 10px 0;
+        }
+
+        .module-links a {
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 1.5em;
+            padding: 15px 25px;
+            background: rgba(0, 123, 255, 0.9); /* Stronger blue */
+            border-radius: 10px;
+            box-shadow: inset 0px -3px 0px rgba(0, 86, 179, 1), 0px 4px 8px rgba(0, 0, 0, 0.4); /* Inset and outer shadow */
+            transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .module-links a:hover {
+            transform: translateY(-2px); /* Lift effect */
+            background: rgba(0, 86, 179, 1); /* Solid blue on hover */
+            box-shadow: inset 0px -5px 0px rgba(0, 72, 150, 1), 0px 6px 12px rgba(0, 0, 0, 0.5); /* Deeper inset and outer shadow */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div> <!-- Background image without shadow -->
+
+    <div class="overlay"></div> <!-- Dark overlay for readability -->
+
+    <h1>COMPUTATIONAL CHEMISTRY</h1>
+    <div class="module-links">
+        <b><a href="https://drive.google.com/file/d/1-f-fIuHH5fepjJv8EbscBhVYYVhon8sK/view?usp=sharing">MODULE:0 INTRODUCTION TO COMPUTATIONAL CHEMISTRY</a></b>
+        <b><a href="Module_1.html">MODULE:1 MEASUREMENTS</a></b>
+        <b><a href="Module_2.html">MODULE:2 QUANTUM CHEMISTRY</a></b>
+        <b><a href="Module_3.html">MODULE:3 THERMODYNAMICS</a></b>
+        <b><a href="Module_4.html">MODULE:4 POTENTIAL ENERGY SURFACES</a></b>
+        <b><a href="Module_5.html">MODULE:5 MOLECULAR DYNAMICS</a></b>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            background-image: url("https://1drv.ms/i/c/15b44a389630a523/ERQrehjSyu9Mj5BfBPEz48oBLxYzKfU94H_CsNjrDC9cBg?e=5DaDI");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .flashcard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-rows: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .flashcard {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .flashcard:hover {
+            transform: scale(1.05);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            backface-visibility: hidden;
+            transition: transform 0.6s;
+        }
+
+        .flashcard-front {
+            background-color: #fff;
+        }
+
+        .flashcard-back {
+            background-color: #f9f9f9;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.flipped .flashcard-front {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.flipped .flashcard-back {
+            transform: rotateY(360deg);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="flashcard-container">
+        <!-- Flashcard 1 -->
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                What is Molecular Dynamics?
+            </div>
+            <div class="flashcard-back">
+                Molecular Dynamics is a computer simulation of physical movements of atoms and molecules. The trajectories of molecules and atoms are determined by numerically solving the classical equations of motion (Newton's equations) for a system of interacting particles, where forces between the particles and potential energy are defined by molecular mechanics force fields.
+            </div>
+        </div>
+
+        <!-- Flashcard 2 -->
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                When was Molecular Dynamics first accomplished?
+            </div>
+            <div class="flashcard-back">
+                Molecular Dynamics was first accomplished in 1957 and 1959 for a system of hard spheres by Adler.
+            </div>
+        </div>
+
+        <!-- Flashcard 3 -->
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                What is the primary application of Molecular Dynamics today?
+            </div>
+            <div class="flashcard-back">
+                Molecular Dynamics is applied mostly in materials science and modeling of biomolecules.
+            </div>
+        </div>
+
+        <!-- Flashcard 4 -->
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                What is the motivation behind Molecular Dynamics simulations?
+            </div>
+            <div class="flashcard-back">
+                The motivation is to conduct a computer experiment where a model is provided by theorists, but the calculations are carried out by the machine following an algorithm. This allows for the introduction of complexity and the investigation of more realistic systems, leading to a better understanding of real experiments.
+            </div>
+        </div>
+
+        <!-- Flashcard 5 -->
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                What are the steps involved in Molecular Dynamics simulations?
+            </div>
+            <div class="flashcard-back">
+                1. Build a realistic atomistic model of the system.<br>
+                2. Simulate the behavior of the system over time using specific conditions (temperature, pressure, volume, etc.).
+            </div>
+        </div>
+
+        <!-- Flashcard 6 -->
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                What is the equation of motion used in Molecular Dynamics?
+            </div>
+            <div class="flashcard-back">
+                The equation of motion used is Newton's second law, F = ma, where F is the force exerted on the particle, m is its mass, and a is its acceleration.
+            </div>
+        </div>
+
+        <!-- Flashcard 7 -->
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                How are forces calculated in Molecular Dynamics?
+            </div>
+            <div class="flashcard-back">
+                Forces are calculated using the gradient of the potential energy function. The force on each particle is given by F_i = -∇_i V.
+            </div>
+        </div>
+
+        <!-- Flashcard 8 -->
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                What are some simple interatomic potentials used in Molecular Dynamics?
+            </div>
+            <div class="flashcard-back">
+                1. Lennard-Jones Potential: u^ij(r) = 4 ε [(σ/r)^12 - (σ/r)^6]<br>
+                2. Born-Mayer (Tosi-Fumi) Potential: U(r_ij) = (q_i q_j / r_ij) + A_ij exp(-r_ij / ρ_ij) - (C_ij / r_ij^6)
+            </div>
+        </div>
+
+        <!-- Flashcard 9 -->
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                What is the purpose of periodic boundary conditions in Molecular Dynamics?
+            </div>
+            <div class="flashcard-back">
+                Periodic boundary conditions are used to nullify surface effects and study the bulk properties of the system with a small number of particles. They involve replicating the simulation box to form an infinite lattice.
+            </div>
+        </div>
+
+        <!-- Flashcard 10 -->
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                What is the minimum image convention in Molecular Dynamics?
+            </div>
+            <div class="flashcard-back">
+                The minimum image convention is adopted to prevent particles from interacting with their own images during the simulation. It ensures that interactions between atoms separated by a chosen cut-off distance or larger are neglected.
+            </div>
+        </div>
+
+        <!-- Flashcard 11 -->
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                What is the radial distribution function (RDF) in Molecular Dynamics?
+            </div>
+            <div class="flashcard-back">
+                The radial distribution function is the probability of finding a pair of atoms a distance r apart relative to the probability for a completely uniform distribution. It indicates if there is local structure in the fluid.
+            </div>
+        </div>
+
+        <!-- Flashcard 12 -->
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                What are some shortcomings of Molecular Dynamics?
+            </div>
+            <div class="flashcard-back">
+                1. Quality of the force field.<br>
+                2. Size and time limitations.<br>
+                3. Conformational freedom of the molecule.<br>
+                4. Applicability only to parameterized systems.<br>
+                5. Inability to simulate chemical reactions.
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleFlip(element) {
+            element.classList.toggle('flipped');
+        }
+    </script>
+</body>
+
+</html>

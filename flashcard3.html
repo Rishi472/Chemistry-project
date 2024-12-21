@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        .flashcard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-rows: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .flashcard {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .flashcard:hover {
+            transform: scale(1.05);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            backface-visibility: hidden;
+            transition: transform 0.6s;
+        }
+
+        .flashcard-front {
+            background-color: #fff;
+        }
+
+        .flashcard-back {
+            background-color: #f9f9f9;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.flipped .flashcard-front {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.flipped .flashcard-back {
+            transform: rotateY(360deg);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="flashcard-container">
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is thermodynamics?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>Thermodynamics is the science that deals with the relationships between heat and other forms of energy. It originated during the Industrial Revolution to maximize the efficiency of heat engines.
+
+                </p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is a thermodynamic system?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>A thermodynamic system is any part of the universe under consideration. It can range from something simple like a beaker of water to something complex like an entire galaxy.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are thermodynamic surroundings?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>Thermodynamic surroundings are everything other than the thermodynamic system, i.e., the rest of the universe.
+                </p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are the three types of thermodynamic systems?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>1. Open System: Exchanges both energy and matter with its surroundings.<br>
+                   2. Closed System: Exchanges energy but not matter with its surroundings.<br>
+                   3. Isolated System: Exchanges neither energy nor matter with its surroundings.
+                    </p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is the difference between diathermic and adiabatic systems?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>• <b>Diathermic System:</b> Allows heat flow into or out of the system.<br>
+                   • <b>Adiabatic System:</b> Prevents heat flow into or out of the system.
+                    </p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are state functions?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>State functions describe the state of a system. Examples include pressure (P), volume (V), temperature (T), mass (m), quantity (n), internal energy (U), enthalpy (H), entropy (S), and Gibbs energy (G).</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are path functions?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>path functions govern the transition between states and describe how energy enters or leaves the system. Examples include heat (q) and work (w)</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What are the four laws of thermodynamics?</p>
+            </div>
+            <div class="flashcard-back">
+                <p> Zeroth Law: If two systems are each in thermal equilibrium with a third, they are in thermal equilibrium with each other.<br>
+                    First Law: Energy cannot be created or destroyed, only transformed.<br>
+                    Second Law: The total entropy of an isolated system can never decrease over time.<br>
+                     Third Law: The entropy of a system approaches a constant value as the temperature approaches absolute zero.
+                    </p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is enthalpy (H)?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>Enthalpy is a state function defined as H=U+pV, where U is internal energy, p is pressure, and V is volume. It is useful for describing processes at constant pressure.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is entropy (S)?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>Entropy is a state function that measures the disorder or randomness of a system. It is defined as ΔS=q(rev)/T  where q(rev)is the heat exchanged reversibly and T is the temperature.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is Gibbs energy (G)?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>Gibbs energy is a state function defined as G=H−TS, where H is enthalpy,T is temperature, and S is entropy. It is used to determine the spontaneity of a process.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>What is Hess's Law?</p>
+            </div>
+            <div class="flashcard-back">
+                <p>Hess's Law states that the enthalpy change of a reaction is independent of the pathway between the initial and final states. It is applicable to all state functions, including enthalpy (H), internal energy (U), entropy (S), and Gibbs energy (G)</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleFlip(element) {
+            element.classList.toggle('flipped');
+        }
+    </script>
+</body>
+
+</html>

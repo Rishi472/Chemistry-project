@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcards</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        .flashcard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-rows: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .flashcard {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .flashcard:hover {
+            transform: scale(1.05);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            box-sizing: border-box;
+            backface-visibility: hidden;
+            transition: transform 0.6s;
+            font-size: 13px;
+            text-align: left;
+            overflow-y: auto;
+        }
+
+        .flashcard-front {
+            background-color: #fff;
+        }
+
+        .flashcard-back {
+            background-color: #f9f9f9;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.flipped .flashcard-front {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.flipped .flashcard-back {
+            transform: rotateY(360deg);
+        }
+
+        .flashcard img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="flashcard-container">
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>Evolution of Quantum Mechanics</p>
+            </div>
+            <div class="flashcard-back">
+                <p>1900: Max Planck - black-body radiation<br>
+                    1905: Albert Einstein - photoelectric effect<br>
+                    1913: Niels Bohr - atomic structure<br>
+                    1918: Max Planck - Nobel Prize in physics<br>
+                    1921: Albert Einstein - Nobel Prize in Physics (photoelectric effect)<br>
+                    1922: Niels Bohr - Nobel Prize in physics<br>
+                    1924: Louis De Broglie - electron waves<br>
+                    1925: Heisenberg Uncertainty principle, Wolfgang Pauli - spin number<br>
+                    1929: Louis De Broglie - Nobel Prize<br>
+                    1932: Werner Heisenberg - Nobel Prize in physics<br>
+                    1933: Otto Stern - magnetic moment of the proton<br>
+                    1936: Schrödinger’s Equation<br>
+                    1940: Pauli proves Spin-Statistic Theorem<br>
+                    1943: Otto Stern - Nobel Prize in Physics<br>
+                    1944: Pauli - Nobel Prize in physics</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>Structure of the Atom (1909)</p>
+            </div>
+            <div class="flashcard-back">
+                <p>• Plum pudding model by J.J. Thomson<br>
+                   • Electrons floating in a soup of positive charge.</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>Rutherford's Atomic Model</p>
+            </div>
+            <div class="flashcard-back">
+                <p> •  Ernest Rutherford studied alpha emission from radioactive elements<br>
+                    • Discovered that atoms have a small, dense nucleus<br>
+                    • Drawback: Classical theory predicts unstable atoms due to radiating electrons</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>Development Leading to Bohr's Model</p>
+            </div>
+            <div class="flashcard-back">
+                <p>• Dual character of electromagnetic radiation<br>
+                   • Quantized electronic energy levels in atoms</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>Wave Nature of Electromagnetic Radiation</p>
+            </div>
+            <div class="flashcard-back">
+                <p>• John Maxwell (1870) explained interaction between charged bodies and electromagnetic fields<br>
+                   • Electromagnetic waves or radiation produced by accelerating charged particles</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>Black Body Radiation</p>
+            </div>
+            <div class="flashcard-back">
+                <p>• Ideal body emitting and absorbing all frequencies<br>
+                   • Planck's Quantum Theory: Energy emitted or absorbed in discrete quantities (quanta)<br>
+                   • Energy of a quantum: E=hν</p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>Photoelectric Effect</p>
+            </div>
+            <div class="flashcard-back">
+                <p>• Emission of electrons from a metal surface when struck by light<br>
+                   • Energy of ejected electrons depends on frequency, not intensity<br>
+                   • hν=hν∘+½mv² (m:mass of electron)
+                </p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>Hydrogen Emission Spectrum</p>
+            </div>
+            <div class="flashcard-back">
+                <p>• Characteristic line spectra for each element<br>
+                   • Used in chemical analysis to identify unknown atoms<br>
+                   • Rydberg formula: 1/λ = 109,677[(1/n1²)-(1/n2²)]cm⁻¹
+                </p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>Bohr Model of the Hydrogen Atom</p>
+            </div>
+            <div class="flashcard-back">
+                <p>• Stationary states with well-defined energies<br>
+                   • Angular momentum is quantized: L=nℏ<br>
+                   • Energy levels: En = −E∘/n²
+                     </p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>Wave Nature of Particles</p>
+            </div>
+            <div class="flashcard-back">
+                <p>• Louis de Broglie: Particles have wave-like properties<br>
+                   • de Broglie's equation: λ = h/mv
+                </p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>Heisenberg's Uncertainty Principle</p>
+            </div>
+            <div class="flashcard-back">
+                <p>• Fundamental limitation on knowing both position and momentum precisely<br>
+                   • Δx⋅Δp≥ℏ/2<br>
+                    </p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>Schrödinger Equation</p>
+            </div>
+            <div class="flashcard-back">
+                <p>• Central equation in Quantum Mechanics<br>
+                   • Ĥψ=Eψ<br>
+                   • Hamiltonian Operator Ĥ, Total Energy E
+                </p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>Wavefunctions</p>
+            </div>
+            <div class="flashcard-back">
+                <p>• Describe spatial distribution of a particle<br>
+                   • Born Interpretation: ∣ψ(x)∣²  is proportional to the probability of finding the particle at 
+                </p>
+            </div>
+        </div>
+        <div class="flashcard" onclick="toggleFlip(this)">
+            <div class="flashcard-front">
+                <p>Particle in a Box Model</p>
+            </div>
+            <div class="flashcard-back">
+                <p>• Particle of mass m in 1-D box of length L<br>
+                   • Allowed energies:En=n²h²/8mL²<br>
+                   • Quantum numbers n determine energy levels
+                </p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleFlip(element) {
+            element.classList.toggle('flipped');
+        }
+    </script>
+</body>
+
+</html>
